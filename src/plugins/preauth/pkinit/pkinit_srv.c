@@ -463,8 +463,10 @@ pkinit_server_verify_padata(krb5_context context,
 #endif
     /* create a per-request context */
     retval = pkinit_init_kdc_req_context(context, &reqctx);
-    if (retval)
-        goto cleanup;
+    if (retval){
+        (*respond)(arg, retval, NULL, NULL, NULL);
+        return;
+    }
     reqctx->pa_type = data->pa_type;
 
     PADATA_TO_KRB5DATA(data, &k5data);
